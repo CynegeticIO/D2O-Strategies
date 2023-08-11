@@ -25,3 +25,28 @@ class DeribitAPI:
             "depth": depth,
         }
         return self._make_request(endpoint, params=params)
+
+class Option:
+    def __init__(self, symbol, option_type, strike_price, quantity):
+        self.symbol = symbol
+        self.option_type = option_type
+        self.strike_price = strike_price
+        self.quantity = quantity
+
+class DeribitPortfolio:
+    def __init__(self):
+        self.options = []
+
+    def add_option(self, option):
+        self.options.append(option)
+
+    def calculate_portfolio_value(self, underlying_price):
+        total_value = 0
+        for option in self.options:
+            option_value = 0
+            if option.option_type == "call":
+                option_value = max(underlying_price - option.strike_price, 0) * option.quantity
+            elif option.option_type == "put":
+                option_value = max(option.strike_price - underlying_price, 0) * option.quantity
+            total_value += option_value
+        return total_value
