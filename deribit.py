@@ -1,6 +1,24 @@
 import requests
+import ccxt
 
 class DeribitAPI:
+    def __init__(self):
+        self.exchange = ccxt.deribit({
+            'apiKey': '0KAFcKks',
+            'secret': 'MTviEm1EAYUhmOq9MFx6gBXuYiTifgJ82lpKTMLQiOQ',
+        })
+
+    def fetch_option_instruments(self):
+        params = {'currency': 'BTC'}  # Cambiar a 'ETH' si deseas instrumentos de Ethereum
+        return self.exchange.publicGetGetInstruments(params=params)
+
+    def fetch_ticker(self, symbol):
+        return self.exchange.publicGetTicker({'instrument_name': symbol})
+
+    def fetch_order_book(self, symbol):
+        return self.exchange.publicGetGetOrderBook({'instrument_name': symbol})
+
+class Deribit:
     def __init__(self, api_key, api_secret):
         self.api_key = api_key
         self.api_secret = api_secret
@@ -50,3 +68,24 @@ class DeribitPortfolio:
                 option_value = max(option.strike_price - underlying_price, 0) * option.quantity
             total_value += option_value
         return total_value
+
+
+class DeribitConnector:
+ 
+    def __init__(self, api_key=None, secret=None):
+        self.exchange = ccxt.deribit({
+            'apiKey': api_key,
+            'secret': secret,
+        })
+
+    def fetch_option_instruments(self):
+        # Obtener la lista de instrumentos de opciones disponibles
+        return self.exchange.publicGetGetInstruments()
+
+    def fetch_option_ticker(self, instrument_name):
+        # Obtener el ticker para un instrumento de opción específico
+        return self.exchange.publicGetTicker({'instrument_name': instrument_name})
+
+    def fetch_order_book(self, instrument_name):
+        # Obtener el libro de órdenes para un instrumento de opción específico
+        return self.exchange.publicGetGetOrderBook({'instrument_name': instrument_name})

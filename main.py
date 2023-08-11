@@ -1,47 +1,25 @@
-from tabulate import tabulate
-from deribit import DeribitAPI, Option, DeribitPortfolio
+from deribit import DeribitAPI
+import pandas as pd
 
 
 def main():
-    api_key = '0KAFcKks' # "YOUR_API_KEY"
-    api_secret = 'MTviEm1EAYUhmOq9MFx6gBXuYiTifgJ82lpKTMLQiOQ' # "YOUR_API_SECRET"
 
-    deribit = DeribitAPI(api_key, api_secret)
+    deribit = DeribitAPI()
 
-    instruments = deribit.get_instruments()
-    print("Instruments:", instruments)
+    option_instruments = deribit.fetch_option_instruments()
+    # print("Option Instruments:", option_instruments)
 
-    instrument_name = "BTC-PERPETUAL"
-    orderbook = deribit.get_orderbook(instrument_name)
-    print(f"Order book for {instrument_name}:", orderbook)
+    btc_ticker = deribit.fetch_ticker('BTC-PERPETUAL')
+    # print("BTC Ticker:", btc_ticker)
 
+    eth_order_book = deribit.fetch_order_book('ETH-PERPETUAL')
+    # print("ETH Order Book:", eth_order_book)
 
-    # Crear instancias de opciones
-    option1 = Option(symbol="BTC-28JAN22-50000-C", option_type="call", strike_price=50000, quantity=2)
-    option2 = Option(symbol="BTC-28JAN22-45000-P", option_type="put", strike_price=45000, quantity=1)
-
-    # Crear una instancia del portfolio
-    portfolio = DeribitPortfolio()
-
-    # Agregar las opciones al portfolio
-    portfolio.add_option(option1)
-    portfolio.add_option(option2)
-
-    # Obtener el precio subyacente actual (debe reemplazarse con la obtención real)
-    underlying_price = 47000
-
-    # Calcular y mostrar el valor total del portfolio
-    portfolio_value = portfolio.calculate_portfolio_value(underlying_price)
-
-    # Tabular los datos para mostrarlos como una tabla
-    table_data = []
-    for option in portfolio.options:
-        table_data.append([option.symbol, option.option_type, option.strike_price, option.quantity])
-
-    print("Portfolio options:")
-    print(tabulate(table_data, headers=["Symbol", "Type", "Strike Price", "Quantity"]))
-    print("Underlying Price:", underlying_price)
-    print("Portfolio value:", portfolio_value)
+    # Convertir el resultado JSON en una tabla (DataFrame)
+    df_op = pd.DataFrame(option_instruments['result'])
+    df_btc = pd.DataFrame(btc_ticker['result'])
+    print("Option Instruments Table:")
+    print(df_btc)
 
 
 if __name__ == "__main__":
