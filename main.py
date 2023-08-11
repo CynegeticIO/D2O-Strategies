@@ -1,5 +1,6 @@
-from deribit import DeribitAPI
-from deribit import Option, DeribitPortfolio
+from tabulate import tabulate
+from deribit import DeribitAPI, Option, DeribitPortfolio
+
 
 def main():
     api_key = '0KAFcKks' # "YOUR_API_KEY"
@@ -31,7 +32,17 @@ def main():
 
     # Calcular y mostrar el valor total del portfolio
     portfolio_value = portfolio.calculate_portfolio_value(underlying_price)
+
+    # Tabular los datos para mostrarlos como una tabla
+    table_data = []
+    for option in portfolio.options:
+        table_data.append([option.symbol, option.option_type, option.strike_price, option.quantity])
+
+    print("Portfolio options:")
+    print(tabulate(table_data, headers=["Symbol", "Type", "Strike Price", "Quantity"]))
+    print("Underlying Price:", underlying_price)
     print("Portfolio value:", portfolio_value)
+
 
 if __name__ == "__main__":
     main()
