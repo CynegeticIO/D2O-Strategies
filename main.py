@@ -1,9 +1,11 @@
 from deribit import DeribitAPI
 import pandas as pd
+from deribit import DeribitDraw
 
 
 def main():
 
+    """
     deribit = DeribitAPI()
 
     option_instruments = deribit.fetch_option_instruments()
@@ -20,6 +22,15 @@ def main():
     df_btc = pd.DataFrame(btc_ticker['result'])
     print("Option Instruments Table:")
     print(df_btc)
+
+    """
+
+    deribit = DeribitDraw()
+    
+    # Obtener y visualizar precios de opciones
+    option_prices = deribit.fetch_option_prices('BTC-PERPETUAL')
+    deribit.plot_option_prices(option_prices)
+    
 
 
 if __name__ == "__main__":
