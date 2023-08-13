@@ -12,7 +12,7 @@ def main():
     # print("Option Instruments:", option_instruments)
 
     btc_ticker = deribit.fetch_ticker('BTC-PERPETUAL')
-    # print("BTC Ticker:", btc_ticker)
+    # print("BTC Ticker:", btc_ticker) 
 
     eth_order_book = deribit.fetch_order_book('ETH-PERPETUAL')
     # print("ETH Order Book:", eth_order_book)
