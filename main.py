@@ -1,6 +1,7 @@
 from deribit import DeribitAPI
 import pandas as pd
 from deribit import DeribitDraw
+from monitoring import InvestmentManager
 
 
 def main():
@@ -32,6 +33,14 @@ def main():
     deribit.plot_option_prices(option_prices)
     
 
-
 if __name__ == "__main__":
-    main()
+    # Create instances of classes and execute strategies
+    # ...
+    investment_manager = InvestmentManager(strategy, data_processor, algorithm)
+
+    try:
+        investment_manager.start_monitoring()
+        input("Press Enter to stop monitoring...")
+    except KeyboardInterrupt:
+        investment_manager.stop_monitoring()
+        print("Monitoring stopped.")
